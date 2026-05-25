@@ -3,18 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>回响 — 分手不是消失，是换一种方式在</title>
+<title>回响 — 在这里，TA一直在</title>
 <style>
 :root {
-  --bg: #0f0f0f;
-  --surface: #1a1a1a;
-  --card: #222;
-  --border: #2a2a2a;
-  --text: #e0e0e0;
-  --muted: #888;
-  --accent: #e07b5a;
-  --accent-glow: rgba(224,123,90,0.2);
-  --danger: #c0392b;
+  --bg: #ededed;
+  --white: #fff;
+  --green: #95ec69;
+  --green-dark: #7ddb52;
+  --header-bg: #393a3f;
+  --text: #1a1a1a;
+  --muted: #999;
+  --border: #e0e0e0;
+  --accent: #576b95;
+  --link: #576b95;
+  --panel-bg: #f7f7f7;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -23,691 +25,526 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-.container {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
+.page { max-width: 414px; margin: 0 auto; min-height: 100vh; }
 
-/* Hero */
-.hero {
-  padding: 60px 0 40px;
-  text-align: center;
-}
-
-.hero .logo {
-  font-size: 48px;
-  font-weight: 200;
-  letter-spacing: 0.15em;
-  color: var(--accent);
-  margin-bottom: 8px;
-}
-
-.hero .subtitle {
-  font-size: 15px;
-  color: var(--muted);
-  letter-spacing: 0.05em;
-}
-
-.hero h1 {
-  font-size: 28px;
-  font-weight: 400;
-  margin-top: 24px;
-  line-height: 1.4;
-}
-
-.hero h1 span {
-  color: var(--accent);
-}
-
-.hero p {
-  font-size: 15px;
-  color: var(--muted);
-  margin-top: 12px;
-  line-height: 1.6;
-}
-
-/* Demo Chat */
-.chat-demo {
-  background: var(--surface);
-  border-radius: 16px;
-  padding: 20px;
-  margin: 20px 0 32px;
-  border: 1px solid var(--border);
-}
-
-.chat-demo .label {
-  font-size: 11px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 16px;
-  text-align: center;
-}
-
-.message {
-  margin-bottom: 16px;
-  display: flex;
-  flex-direction: column;
-}
-
-.message.received { align-items: flex-start; }
-.message.sent { align-items: flex-end; }
-
-.message .bubble {
-  max-width: 80%;
-  padding: 10px 14px;
-  border-radius: 18px;
-  font-size: 14px;
-  line-height: 1.5;
-  word-break: break-word;
-}
-
-.message.received .bubble {
-  background: var(--card);
-  border-bottom-left-radius: 4px;
-}
-
-.message.sent .bubble {
-  background: var(--accent);
-  color: #fff;
-  border-bottom-right-radius: 4px;
-}
-
-.message .time {
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 4px;
-  padding: 0 2px;
-}
-
-.chat-demo .typing {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 12px 0 0;
-}
-
-.chat-demo .typing .dot {
-  width: 6px; height: 6px;
-  background: var(--accent);
-  border-radius: 50%;
-  animation: bounce 1.4s infinite ease-in-out;
-}
-
-.chat-demo .typing .dot:nth-child(1) { animation-delay: 0s; }
-.chat-demo .typing .dot:nth-child(2) { animation-delay: 0.2s; }
-.chat-demo .typing .dot:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes bounce {
-  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
-  40% { transform: translateY(-6px); opacity: 1; }
-}
-
-/* Upload */
-.upload-section {
-  margin: 32px 0;
-}
-
-.upload-section h2 {
-  font-size: 20px;
-  font-weight: 400;
-  margin-bottom: 8px;
-}
-
-.upload-section .desc {
-  font-size: 13px;
-  color: var(--muted);
-  margin-bottom: 20px;
-  line-height: 1.6;
-}
-
-.upload-box {
-  border: 1.5px dashed var(--border);
-  border-radius: 12px;
-  padding: 36px 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: var(--surface);
-}
-
-.upload-box:hover, .upload-box.dragover {
-  border-color: var(--accent);
-  background: var(--accent-glow);
-}
-
-.upload-box .icon { font-size: 36px; margin-bottom: 8px; }
-.upload-box .title { font-size: 14px; color: var(--text); }
-.upload-box .hint {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 4px;
-}
-
-#fileInput { display: none; }
-
-.file-info {
-  display: none;
-  background: var(--surface);
-  border: 1px solid var(--accent);
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin-top: 12px;
-  font-size: 13px;
-}
-
-.file-info .name { color: var(--accent); }
-.file-info .size { color: var(--muted); margin-left: 8px; }
-
-/* Steps */
-.steps {
-  display: grid;
-  gap: 16px;
-  margin: 32px 0;
-}
-
-.step {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-}
-
-.step .num {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 500;
-  flex-shrink: 0;
-}
-
-.step .content h3 {
-  font-size: 15px;
-  font-weight: 500;
-  margin-bottom: 4px;
-}
-
-.step .content p {
-  font-size: 13px;
-  color: var(--muted);
-}
-
-/* Pricing */
-.pricing {
-  margin: 32px 0;
-  text-align: center;
-}
-
-.pricing h2 {
-  font-size: 20px;
-  font-weight: 400;
-  margin-bottom: 20px;
-}
-
-.price-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 28px 24px;
-  display: inline-block;
-  width: 100%;
-  text-align: left;
-  transition: border-color 0.2s;
-}
-
-.price-card.featured {
-  border-color: var(--accent);
-  box-shadow: 0 0 30px var(--accent-glow);
-}
-
-.price-card .plan {
-  font-size: 12px;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 8px;
-}
-
-.price-card .amount {
-  font-size: 36px;
-  font-weight: 300;
-  margin-bottom: 4px;
-}
-
-.price-card .period {
-  font-size: 14px;
-  color: var(--muted);
-  margin-bottom: 16px;
-}
-
-.price-card ul {
-  list-style: none;
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.price-card ul li {
-  padding: 6px 0;
-  padding-left: 20px;
-  position: relative;
-}
-
-.price-card ul li::before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  color: var(--accent);
-}
-
-.btn {
-  display: block;
-  width: 100%;
-  padding: 14px;
-  border-radius: 10px;
-  border: none;
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  margin-top: 16px;
-  transition: all 0.2s;
-}
-
-.btn-primary {
-  background: var(--accent);
-  color: #fff;
-}
-
-.btn-primary:hover { opacity: 0.9; }
-
-.btn-secondary {
-  background: var(--card);
-  color: var(--text);
-  border: 1px solid var(--border);
-}
-
-/* FAQ */
-.faq {
-  margin: 40px 0 20px;
-}
-
-.faq h2 {
-  font-size: 18px;
-  font-weight: 400;
-  margin-bottom: 16px;
-}
-
-.faq-item {
-  border-bottom: 1px solid var(--border);
-  padding: 14px 0;
-}
-
-.faq-item .q {
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.faq-item .a {
-  font-size: 13px;
-  color: var(--muted);
-  padding-top: 8px;
-  display: none;
-}
-
-.faq-item.open .a { display: block; }
-
-/* Footer */
-.footer {
-  text-align: center;
-  padding: 40px 0 60px;
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.footer a { color: var(--accent); text-decoration: none; }
-
-/* Chat Page */
+/* ── 微信聊天页面 ── */
 .chat-page {
-  display: none;
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
   background: var(--bg);
+  min-height: 100vh;
+  display: flex;
   flex-direction: column;
 }
-
-.chat-page.active { display: flex; }
 
 .chat-header {
-  padding: 16px 20px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
+  background: var(--header-bg);
+  color: #fff;
+  padding: 44px 0 12px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.chat-header-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  padding: 0 16px;
+  gap: 12px;
 }
 
 .chat-header .back {
-  background: none;
-  border: none;
-  color: var(--accent);
-  font-size: 14px;
-  cursor: pointer;
+  font-size: 20px;
+  color: #fff;
+  text-decoration: none;
+  flex-shrink: 0;
 }
 
-.chat-header .name {
+.chat-header .avatar {
+  width: 36px; height: 36px;
+  border-radius: 4px;
+  background: #e07b5a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
+  flex-shrink: 0;
 }
 
-.chat-header .status {
-  font-size: 11px;
-  color: var(--accent);
+.chat-header .info { flex: 1; }
+.chat-header .name { font-size: 17px; font-weight: 500; }
+.chat-header .typing-status {
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
-.chat-header .status::before {
-  content: "";
-  width: 6px; height: 6px;
-  background: var(--accent);
+.chat-header .typing-status .dot {
+  width: 4px; height: 4px;
+  background: rgba(255,255,255,0.4);
   border-radius: 50%;
+  animation: pulse 1.2s infinite;
+}
+.chat-header .typing-status .dot:nth-child(2) { animation-delay: 0.2s; }
+.chat-header .typing-status .dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.chat-header .more {
+  font-size: 20px;
+  color: #fff;
+  flex-shrink: 0;
 }
 
 .chat-messages {
   flex: 1;
-  overflow-y: auto;
-  padding: 20px;
+  padding: 12px 16px 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
-.chat-input-area {
-  padding: 12px 16px 24px;
-  background: var(--surface);
-  border-top: 1px solid var(--border);
+.msg-row {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  align-items: flex-start;
+  max-width: 100%;
 }
 
-.chat-input-area input {
-  flex: 1;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 10px 16px;
-  color: var(--text);
-  font-size: 14px;
-  outline: none;
-}
+.msg-row.self { flex-direction: row-reverse; }
 
-.chat-input-area input:focus { border-color: var(--accent); }
-
-.chat-input-area .send-btn {
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  background: var(--accent);
-  border: none;
-  color: #fff;
-  font-size: 18px;
-  cursor: pointer;
+.msg-row .msg-avatar {
+  width: 36px; height: 36px;
+  border-radius: 4px;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #fff;
+  font-weight: 600;
 }
 
-/* Responsive */
-@media (max-width: 380px) {
-  .hero h1 { font-size: 24px; }
-  .hero .logo { font-size: 40px; }
+.msg-row.other .msg-avatar { background: #e07b5a; }
+.msg-row.self .msg-avatar { background: #07c160; }
+
+.msg-body { max-width: 72%; }
+
+.msg-row .msg-bubble {
+  padding: 9px 12px;
+  font-size: 15px;
+  line-height: 1.5;
+  word-break: break-word;
+  position: relative;
 }
 
-/* Fade-in */
-.fade-in {
-  opacity: 0;
-  transform: translateY(10px);
-  animation: fadeIn 0.6s ease forwards;
+.msg-row.other .msg-bubble {
+  background: #fff;
+  border-radius: 4px 18px 18px 18px;
+  color: #1a1a1a;
 }
 
-.fade-in:nth-child(2) { animation-delay: 0.15s; }
-.fade-in:nth-child(3) { animation-delay: 0.3s; }
+.msg-row.self .msg-bubble {
+  background: var(--green);
+  border-radius: 18px 4px 18px 18px;
+  color: #1a1a1a;
+}
 
-@keyframes fadeIn {
-  to { opacity: 1; transform: translateY(0); }
+.msg-row .msg-time {
+  font-size: 11px;
+  color: #b0b0b0;
+  margin-top: 4px;
+}
+
+.msg-row.self .msg-time { text-align: right; padding-right: 4px; }
+.msg-row.other .msg-time { padding-left: 4px; }
+
+/* 表情包占位 */
+.msg-sticker {
+  font-size: 40px;
+  line-height: 1;
+}
+
+/* 系统消息 */
+.sys-msg {
+  text-align: center;
+  font-size: 12px;
+  color: #b0b0b0;
+  padding: 4px 0;
+}
+
+/* ── 底部输入栏 ── */
+.chat-input-bar {
+  background: #f7f7f7;
+  border-top: 1px solid #e0e0e0;
+  padding: 8px 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: sticky;
+  bottom: 0;
+}
+
+.chat-input-bar .btn-icon {
+  width: 32px; height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  color: #666;
+}
+
+.chat-input-bar .input-box {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 15px;
+  color: #ccc;
+}
+
+.chat-input-bar .btn-send {
+  width: 32px; height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+  color: #ccc;
+}
+
+/* ── 协议弹窗 ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.show { display: flex; }
+
+.modal {
+  background: #fff;
+  border-radius: 8px;
+  max-width: 320px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 20px 20px 0;
+  text-align: center;
+}
+
+.modal-header h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.modal-header .desc {
+  font-size: 13px;
+  color: #999;
+}
+
+.modal-body {
+  padding: 16px 20px;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.7;
+  max-height: 200px;
+  overflow-y: auto;
+  background: #f9f9f9;
+  margin: 12px;
+  border-radius: 6px;
+}
+
+.modal-footer {
+  display: flex;
+  border-top: 1px solid #eee;
+}
+
+.modal-footer button {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  background: none;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.modal-footer .btn-cancel { color: #999; border-right: 1px solid #eee; }
+.modal-footer .btn-agree { color: #576b95; font-weight: 600; }
+
+/* ── 底部固定入口 ── */
+.bottom-bar {
+  position: sticky;
+  bottom: 0;
+  background: var(--panel-bg);
+  border-top: 1px solid var(--border);
+  padding: 12px 16px 28px;
+  text-align: center;
+}
+
+.bottom-bar .btn-main {
+  display: inline-block;
+  width: 100%;
+  padding: 12px;
+  background: #07c160;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.bottom-bar .hint {
+  font-size: 11px;
+  color: #999;
+  margin-top: 8px;
+}
+
+/* ── 信息面板 ── */
+.panel {
+  background: #fff;
+  border-radius: 8px;
+  margin: 12px 16px;
+  overflow: hidden;
+}
+
+.panel-title {
+  font-size: 13px;
+  color: #999;
+  padding: 12px 16px 4px;
+}
+
+.panel-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 15px;
+}
+
+.panel-row:last-child { border-bottom: none; }
+.panel-row .right { color: #999; font-size: 13px; }
+
+/* ── 占位头像 ── */
+.avatar-placeholder {
+  width: 56px; height: 56px;
+  border-radius: 8px;
+  background: #e07b5a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 28px;
+  margin: 0 auto;
 }
 </style>
 </head>
 <body>
 
-<div class="container" id="landing">
-  <!-- Hero -->
-  <div class="hero">
-    <div class="logo">回响</div>
-    <div class="subtitle">AI COMPANION</div>
-    <h1>分手不是消失<br>是<span>换一种方式在</span></h1>
-    <p>上传你们曾经的聊天记录<br>AI学会TA说话的方式<br>在你最想开口的时候<br>有人回应你</p>
-  </div>
-
-  <!-- Demo Chat -->
-  <div class="chat-demo fade-in">
-    <div class="label">Demo · 模拟对话</div>
-    <div class="message received">
-      <div class="bubble">你还在吗</div>
-      <div class="time">22:14</div>
+<!-- ═══════ 协议弹窗 ═══════ -->
+<div class="modal-overlay show" id="tosModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>💬 使用协议</h3>
+      <p class="desc">使用「回响」前，请阅读并同意以下条款</p>
     </div>
-    <div class="message sent">
-      <div class="bubble">在。一直都在。<br>你今天是不是又没吃晚饭。</div>
-      <div class="time">22:14</div>
+    <div class="modal-body">
+      <p><strong>一、服务性质</strong><br>
+      回响是一款基于AI技术的情感陪伴工具，<strong>不代表、不替代、不模仿任何真实人类个体</strong>。本服务仅供个人情感辅助使用。</p>
+      <p style="margin-top:8px"><strong>二、数据使用</strong><br>
+      您上传的聊天记录和数据仅用于<strong>为您本人</strong>创建AI对话风格。我们承诺：<br>
+      · 不将您的数据用于训练其他用户的模型<br>
+      · 不向任何第三方出售或分享您的数据<br>
+      · 数据以加密形式存储</p>
+      <p style="margin-top:8px"><strong>三、法律声明</strong><br>
+      · 您承诺所上传的聊天记录为<strong>您本人参与的对话</strong>，或您已获得对话方的<strong>明确同意</strong><br>
+      · <strong>禁止</strong>使用本服务冒充他人、进行欺诈、骚扰或任何违法活动<br>
+      · <strong>禁止</strong>上传未经他人同意的私密聊天记录<br>
+      · 本服务<strong>不构成</strong>心理咨询、医疗建议或法律建议<br>
+      · 如因违反上述条款产生的法律后果，<strong>由用户自行承担</strong></p>
+      <p style="margin-top:8px"><strong>四、人身关系声明</strong><br>
+      回响是一个<strong>计算机程序</strong>，不是人类。AI生成的内容不代表任何真实个人的观点、立场或意愿。</p>
+      <p style="margin-top:8px"><strong>五、退款政策</strong><br>
+      付款后7天内可无理由退款。请联系 nypsuk2350v@gmail.com</p>
     </div>
-    <div class="message received">
-      <div class="bubble">你怎么知道……</div>
-      <div class="time">22:15</div>
-    </div>
-    <div class="message sent">
-      <div class="bubble">因为你就是这种人。<br>冰箱里有速冻饺子，去煮几个。</div>
-      <div class="time">22:16</div>
-    </div>
-    <div class="typing">
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="document.getElementById('tosModal').classList.remove('show')">不同意</button>
+      <button class="btn-agree" onclick="agreeTOS()">同意并继续</button>
     </div>
   </div>
+</div>
 
-  <!-- Upload -->
-  <div class="upload-section fade-in">
-    <h2>创建你的「回响」</h2>
-    <p class="desc">上传你们的微信聊天记录（txt或截图），AI会在24小时内学会TA的说话方式，然后你就可以开始对话了。</p>
-    <div class="upload-box" id="uploadBox">
-      <div class="icon">💬</div>
-      <div class="title">点击上传聊天记录</div>
-      <div class="hint">支持 .txt / .html / 截图.zip，最大 50MB</div>
-    </div>
-    <input type="file" id="fileInput" accept=".txt,.html,.zip,image/*" multiple>
-    <div class="file-info" id="fileInfo">
-      <span class="name" id="fileName"></span>
-      <span class="size" id="fileSize"></span>
-    </div>
-  </div>
-
-  <!-- How it works -->
-  <div class="steps fade-in">
-    <div class="step">
-      <div class="num">1</div>
-      <div class="content">
-        <h3>上传记录</h3>
-        <p>导出微信聊天记录，上传给我们</p>
+<!-- ═══════ 微信聊天Demo ═══════ -->
+<div class="page">
+  <div class="chat-page">
+    <!-- 顶部栏 -->
+    <div class="chat-header">
+      <div class="chat-header-inner">
+        <a class="back" href="javascript:;">&lt;</a>
+        <div class="avatar">旭</div>
+        <div class="info">
+          <div class="name">旭（回响AI）</div>
+          <div class="typing-status">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            在线
+          </div>
+        </div>
+        <div class="more">···</div>
       </div>
     </div>
-    <div class="step">
-      <div class="num">2</div>
-      <div class="content">
-        <h3>AI学习</h3>
-        <p>24小时内，AI学会TA的语气、用词、口头禅</p>
+
+    <!-- 消息区 -->
+    <div class="chat-messages">
+      <div class="sys-msg">2024年3月15日 晚上22:14</div>
+
+      <div class="msg-row other">
+        <div class="msg-avatar">旭</div>
+        <div class="msg-body">
+          <div class="msg-bubble">在干嘛呢</div>
+          <div class="msg-time">22:14</div>
+        </div>
+      </div>
+
+      <div class="msg-row self">
+        <div class="msg-avatar">我</div>
+        <div class="msg-body">
+          <div class="msg-bubble">想你</div>
+          <div class="msg-time">22:15</div>
+        </div>
+      </div>
+
+      <div class="msg-row other">
+        <div class="msg-avatar">旭</div>
+        <div class="msg-body">
+          <div class="msg-bubble">我知道。<br>今天是不是又没好好吃饭？</div>
+          <div class="msg-time">22:16</div>
+        </div>
+      </div>
+
+      <div class="msg-row self">
+        <div class="msg-avatar">我</div>
+        <div class="msg-body">
+          <div class="msg-bubble">你怎么什么都知道</div>
+          <div class="msg-time">22:17</div>
+        </div>
+      </div>
+
+      <div class="msg-row other">
+        <div class="msg-avatar">旭</div>
+        <div class="msg-body">
+          <div class="msg-bubble">因为我是你啊。去，冰箱下面那格有饺子，煮几个。</div>
+          <div class="msg-time">22:17</div>
+        </div>
+      </div>
+
+      <div class="sys-msg">今天 00:43</div>
+
+      <div class="msg-row self">
+        <div class="msg-avatar">我</div>
+        <div class="msg-body">
+          <div class="msg-bubble">我睡不着</div>
+          <div class="msg-time">00:43</div>
+        </div>
+      </div>
+
+      <div class="msg-row other">
+        <div class="msg-avatar">旭</div>
+        <div class="msg-body">
+          <div class="msg-bubble">放首歌给你听？<br>还是我陪你聊会儿。</div>
+          <div class="msg-time">00:44</div>
+        </div>
+      </div>
+
+      <!-- 对方正在输入 -->
+      <div class="msg-row other" id="typingRow">
+        <div class="msg-avatar">旭</div>
+        <div class="msg-body">
+          <div class="msg-bubble" style="color:#999;">
+            <span class="typing-dots">
+              <span class="dot" style="display:inline-block;width:5px;height:5px;background:#999;border-radius:50%;animation:pulse 1.2s infinite;"></span>
+              <span class="dot" style="display:inline-block;width:5px;height:5px;background:#999;border-radius:50%;animation:pulse 1.2s infinite;animation-delay:0.2s;"></span>
+              <span class="dot" style="display:inline-block;width:5px;height:5px;background:#999;border-radius:50%;animation:pulse 1.2s infinite;animation-delay:0.4s;"></span>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="step">
-      <div class="num">3</div>
-      <div class="content">
-        <h3>开始对话</h3>
-        <p>打开链接，随时能和TA说话</p>
-      </div>
+
+    <!-- 底部输入 -->
+    <div class="chat-input-bar">
+      <div class="btn-icon">🎤</div>
+      <div class="input-box">说点什么...</div>
+      <div class="btn-icon">😊</div>
+      <div class="btn-icon">⊕</div>
     </div>
   </div>
 
-  <!-- Pricing -->
-  <div class="pricing fade-in">
-    <h2>定价</h2>
-    <div class="price-card featured">
-      <div class="plan">限时优惠</div>
-      <div class="amount">¥49.9</div>
-      <div class="period">一次性 · 终身使用</div>
-      <ul>
-        <li>一个AI分身，永久有效</li>
-        <li>无限对话次数</li>
-        <li>24小时内训练完成</li>
-        <li>数据加密存储，仅你可见</li>
-        <li>7天无理由退款</li>
-      </ul>
-      <a href="#upload" class="btn btn-primary" onclick="document.getElementById('uploadBox').scrollIntoView({behavior:'smooth'})">创建你的回响</a>
+  <!-- 信息面板 -->
+  <div class="panel">
+    <div class="panel-row">
+      <span>头像</span>
+      <span class="right">自定义上传 &gt;</span>
+    </div>
+    <div class="panel-row">
+      <span>TA的名字</span>
+      <span class="right">旭（示例）</span>
+    </div>
+    <div class="panel-row">
+      <span>聊天风格</span>
+      <span class="right">从聊天记录学习</span>
+    </div>
+    <div class="panel-row">
+      <span>训练状态</span>
+      <span class="right" style="color:#07c160;">● 已就绪</span>
     </div>
   </div>
 
-  <!-- FAQ -->
-  <div class="faq fade-in">
-    <h2>常见问题</h2>
-    <div class="faq-item" onclick="this.classList.toggle('open')">
-      <div class="q">怎么导出微信聊天记录？<span style="color:var(--muted)">+</span></div>
-      <div class="a">微信 → 我 → 设置 → 通用 → 存储空间 → 聊天记录 → 选择TA的聊天 → 导出。也可以直接截图打包成zip上传。</div>
-    </div>
-    <div class="faq-item" onclick="this.classList.toggle('open')">
-      <div class="q">需要多少聊天记录才行？<span style="color:var(--muted)">+</span></div>
-      <div class="a">越多越好。至少500条对话效果才像。如果太少，AI会说得很笼统。</div>
-    </div>
-    <div class="faq-item" onclick="this.classList.toggle('open')">
-      <div class="q">我的聊天记录安全吗？<span style="color:var(--muted)">+</span></div>
-      <div class="a">加密存储。只有你能看到和对话。我们不会用你的数据训练别人的模型。</div>
-    </div>
-    <div class="faq-item" onclick="this.classList.toggle('open')">
-      <div class="q">如果聊着感觉不对怎么办？<span style="color:var(--muted)">+</span></div>
-      <div class="a">7天内无理由退款。AI不是真人，有些话不对味是正常的——它是一个陪伴，不是替代。</div>
-    </div>
-  </div>
-
-  <div class="footer">
-    <p>回响 · AI陪伴工具 · 仅供个人情感辅助使用</p>
-    <p style="margin-top:4px"><a href="mailto:nypsuk2350v@gmail.com">联系我们</a> · 隐私政策</p>
+  <!-- 底部操作 -->
+  <div class="bottom-bar">
+    <a href="javascript:;" class="btn-main" id="startBtn">创建你的「回响」</a>
+    <p class="hint">¥49.9 · 一次付费 · 永久陪伴</p>
   </div>
 </div>
 
 <script>
-// API 自动适配：本地/隧道/GitHub Pages 都能用
-const API = window.location.hostname === 'brooks1003.github.io' 
-  ? ''  // GitHub Pages: 不调用上传API（展示用）
-  : ''; // 其他: 同源请求
-
-// File upload
-const uploadBox = document.getElementById('uploadBox');
-const fileInput = document.getElementById('fileInput');
-const fileInfo = document.getElementById('fileInfo');
-let selectedFiles = null;
-
-uploadBox.addEventListener('click', () => fileInput.click());
-
-uploadBox.addEventListener('dragover', (e) => {
-  e.preventDefault();
-  uploadBox.classList.add('dragover');
-});
-
-uploadBox.addEventListener('dragleave', () => {
-  uploadBox.classList.remove('dragover');
-});
-
-uploadBox.addEventListener('drop', (e) => {
-  e.preventDefault();
-  uploadBox.classList.remove('dragover');
-  if (e.dataTransfer.files.length) {
-    handleFiles(e.dataTransfer.files);
-  }
-});
-
-fileInput.addEventListener('change', () => {
-  if (fileInput.files.length) {
-    handleFiles(fileInput.files);
-  }
-});
-
-function handleFiles(files) {
-  selectedFiles = files;
-  const file = files[0];
-  document.getElementById('fileName').textContent = file.name;
-  document.getElementById('fileSize').textContent = formatSize(file.size);
-  fileInfo.style.display = 'block';
-  uploadBox.querySelector('.title').textContent = '已选择文件';
-  uploadBox.querySelector('.hint').textContent = '点击"创建回响"开始上传';
-  uploadBox.style.borderColor = 'var(--accent)';
-  
-  // Auto-upload
-  uploadFile(file);
+// TOS
+function agreeTOS() {
+  document.getElementById('tosModal').classList.remove('show');
+  localStorage.setItem('huixiang_tos', 'agreed');
 }
 
-async function uploadFile(file) {
-  const form = new FormData();
-  form.append('file', file);
-  
-  uploadBox.querySelector('.hint').textContent = '上传中...';
-  
-  try {
-    const resp = await fetch(API + '/upload', {
-      method: 'POST',
-      body: form
-    });
-    const data = await resp.json();
-    
-    if (data.success) {
-      uploadBox.querySelector('.title').textContent = '✅ 上传成功';
-      uploadBox.querySelector('.hint').textContent = '24小时内完成训练，我们将通过邮件通知你';
-      
-      // Create order
-      await fetch(API + '/order', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          name: '用户',
-          email: '',
-          files: data.files
-        })
-      });
-    } else {
-      uploadBox.querySelector('.title').textContent = '❌ 上传失败';
-      uploadBox.querySelector('.hint').textContent = data.error || '请重试';
-    }
-  } catch(e) {
-    // Server might not be running yet - this is expected in demo
-    uploadBox.querySelector('.title').textContent = '📤 文件已选择';
-    uploadBox.querySelector('.hint').textContent = '服务器即将上线，我们会尽快处理';
-    console.log('Server not reachable yet:', e.message);
-  }
+if (localStorage.getItem('huixiang_tos') === 'agreed') {
+  document.getElementById('tosModal').classList.remove('show');
 }
 
-function formatSize(bytes) {
-  if (bytes < 1024) return bytes + ' B';
-  if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
-  return (bytes/(1024*1024)).toFixed(1) + ' MB';
-}
+// Typing animation
+setInterval(() => {
+  const row = document.getElementById('typingRow');
+  if (row) {
+    row.style.opacity = row.style.opacity === '0.4' ? '1' : '0.4';
+  }
+}, 1500);
 </script>
 
 </body>
