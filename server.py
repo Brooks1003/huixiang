@@ -34,12 +34,31 @@ class Handler(BaseHTTPRequestHandler):
         self._json({"ok": True})
     
     def do_GET(self):
-        if self.path == "/health":
+        if self.path in ("/", "/index.html"):
+            self._serve_file("index.html", "text/html; charset=utf-8")
+        elif self.path == "/health":
             self._json({"status": "ok", "time": datetime.now().isoformat()})
         elif self.path.startswith("/orders"):
             self._list_orders()
+        elif self.path.startswith("/uploads/"):
+            # 服务已上传的文件
+            self._serve_file(self.path[1:], "application/octet-stream")
         else:
             self._json({"error": "not found"}, 404)
+    
+    def _serve_file(self, filename, content_type):
+        """服务静态文件"""
+        filepath = os.path.join(os.path.dirname(__file__), filename)
+        if os.path.exists(filepath):
+            self.send_response(200)
+            self._cors()
+            self.send_header("Content-Type", content_type)
+            self.send_header("Cache-Control", "no-cache")
+            self.end_headers()
+            with open(filepath, "rb") as f:
+                self.wfile.write(f.read())
+        else:
+            self._json({"error": "file not found"}, 404)
     
     def do_POST(self):
         if self.path == "/upload":

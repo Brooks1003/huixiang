@@ -614,8 +614,10 @@ body {
 </div>
 
 <script>
-const API = 'https://huixiang.hermes.local';
-// 部署后替换为实际Cloudflare Tunnel URL
+// API 自动适配：本地/隧道/GitHub Pages 都能用
+const API = window.location.hostname === 'brooks1003.github.io' 
+  ? ''  // GitHub Pages: 不调用上传API（展示用）
+  : ''; // 其他: 同源请求
 
 // File upload
 const uploadBox = document.getElementById('uploadBox');
