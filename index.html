@@ -248,15 +248,97 @@ body {
     </div>
   </div>
 
-  <!-- 底部 -->
-  <div class="bottom-cta">
-    <button class="btn-cta" onclick="openSettings()">
-      创建你的「<span id="ctaName">旭</span>」
-    </button>
-    <p class="price">¥49.9 · 一次付费 · 永久陪伴</p>
+  <!-- 付款卡片 -->
+  <div class="pricing-card" id="pricingCard">
+    <div class="price-header">
+      <div class="price-tag">限时优惠</div>
+      <div class="price-amount">¥49.9</div>
+      <div class="price-period">一次性付费 · 永久陪伴</div>
+    </div>
+    <ul class="price-features">
+      <li>1个专属AI分身，永久有效</li>
+      <li>无限对话 · 24小时内交付</li>
+      <li>7天无理由退款</li>
+    </ul>
+    <button class="btn-pay" onclick="showPayment()">立即购买</button>
+    <p class="payment-hint">付款后自动跳转上传页面</p>
   </div>
 
 </div>
+
+<!-- 付款弹窗 -->
+<div class="modal-overlay" id="payModal">
+  <div class="modal" style="max-width:300px">
+    <div class="modal-header">
+      <h3>扫码支付</h3>
+      <p class="desc">¥49.9 · 微信/支付宝均可</p>
+    </div>
+    <div style="padding:20px; text-align:center;">
+      <div id="qrcodeBox" style="width:200px;height:200px;margin:0 auto;background:var(--bg);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;">
+        收款码加载中...<br><small>请先配置</small>
+      </div>
+      <p style="margin-top:12px;font-size:12px;color:var(--muted);">付款后在下方上传聊天记录</p>
+      <button class="btn-cta" style="margin-top:12px;width:100%" onclick="markAsPaid()">
+        我已完成付款
+      </button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="document.getElementById('payModal').classList.remove('show')" style="flex:1;border-right:none">关闭</button>
+    </div>
+  </div>
+</div>
+
+<!-- 上传弹窗（付款后显示） -->
+<div class="modal-overlay" id="uploadModal">
+  <div class="modal" style="max-width:320px">
+    <div class="modal-header">
+      <h3>📤 上传聊天记录</h3>
+      <p class="desc">微信导出 .txt 或截图打包 .zip</p>
+    </div>
+    <div style="padding:20px;">
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('realFileInput').click()">
+        <div style="font-size:40px;margin-bottom:8px;">💬</div>
+        <div>点击上传聊天记录</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px;">支持 .txt / .zip / 图片</div>
+      </div>
+      <input type="file" id="realFileInput" accept=".txt,.zip,.html,image/*" style="display:none" onchange="handleChatFile(this)">
+      <div id="uploadStatus" style="display:none;text-align:center;padding:12px;margin-top:12px;background:var(--accent-dim);border-radius:8px;color:var(--accent);font-size:13px;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-agree" onclick="document.getElementById('uploadModal').classList.remove('show')" style="flex:1;border-right:none">稍后上传</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.pricing-card {
+  margin: 16px 12px 32px; background: var(--surface);
+  border-radius: 16px; border: 1px solid var(--accent);
+  box-shadow: 0 0 24px var(--accent-dim); overflow: hidden;
+}
+.price-header { padding: 20px 20px 12px; text-align: center; }
+.price-tag { font-size: 11px; color: var(--accent); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:4px; }
+.price-amount { font-size: 36px; font-weight: 300; color: var(--text); }
+.price-period { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.price-features {
+  list-style:none; padding: 8px 24px 16px; font-size:13px; color:var(--muted);
+}
+.price-features li { padding: 4px 0; padding-left:16px; position:relative; }
+.price-features li::before { content:"✓"; position:absolute; left:0; color:var(--accent); }
+.btn-pay {
+  display:block; width: calc(100% - 32px); margin: 0 16px 16px;
+  padding: 14px; background: var(--accent); color:#fff; border:none;
+  border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer;
+}
+.payment-hint { text-align:center; font-size:11px; color:var(--muted); padding-bottom:12px; }
+
+.upload-zone {
+  padding: 30px 20px; border: 1.5px dashed var(--border);
+  border-radius: 12px; text-align: center; cursor: pointer;
+  transition: all .15s; font-size:14px;
+}
+.upload-zone:hover, .upload-zone.dragover { border-color:var(--accent); background:var(--accent-dim); }
+</style>
 
 <!-- 协议弹窗 -->
 <div class="modal-overlay show" id="tosModal">
@@ -457,6 +539,50 @@ function sharePage() {
 function openSettings() {
   document.getElementById('settingsCard').scrollIntoView({ behavior:'smooth' });
   document.getElementById('nameInput').focus();
+}
+
+// ── 付款 & 上传 ──
+function showPayment() {
+  if (!STORE.get('tos','')) {
+    document.getElementById('tosModal').classList.add('show');
+    return;
+  }
+  document.getElementById('payModal').classList.add('show');
+}
+
+function markAsPaid() {
+  STORE.set('paid', true);
+  document.getElementById('payModal').classList.remove('show');
+  document.getElementById('uploadModal').classList.add('show');
+}
+
+function handleChatFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const status = document.getElementById('uploadStatus');
+  status.style.display = 'block';
+  status.textContent = `✅ 已收到 "${file.name}"（${formatSize(file.size)}）\n24小时内完成训练，将通过邮件通知你`;
+  
+  // 保存文件信息
+  const orders = STORE.get('orders', []);
+  orders.push({
+    name: name,
+    file: file.name,
+    size: file.size,
+    time: new Date().toISOString(),
+    paid: true
+  });
+  STORE.set('orders', orders);
+  
+  // 禁用上传区
+  document.getElementById('uploadZone').style.pointerEvents = 'none';
+  document.getElementById('uploadZone').style.opacity = '0.6';
+}
+
+function formatSize(bytes) {
+  if (bytes < 1024) return bytes + 'B';
+  if (bytes < 1024*1024) return (bytes/1024).toFixed(1)+'KB';
+  return (bytes/(1024*1024)).toFixed(1)+'MB';
 }
 
 // ── 启动 ──
