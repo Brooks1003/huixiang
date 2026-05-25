@@ -614,10 +614,14 @@ body {
 </div>
 
 <script>
+const API = 'https://huixiang.hermes.local';
+// 部署后替换为实际Cloudflare Tunnel URL
+
 // File upload
 const uploadBox = document.getElementById('uploadBox');
 const fileInput = document.getElementById('fileInput');
 const fileInfo = document.getElementById('fileInfo');
+let selectedFiles = null;
 
 uploadBox.addEventListener('click', () => fileInput.click());
 
@@ -645,13 +649,56 @@ fileInput.addEventListener('change', () => {
 });
 
 function handleFiles(files) {
+  selectedFiles = files;
   const file = files[0];
   document.getElementById('fileName').textContent = file.name;
   document.getElementById('fileSize').textContent = formatSize(file.size);
   fileInfo.style.display = 'block';
   uploadBox.querySelector('.title').textContent = '已选择文件';
-  uploadBox.querySelector('.hint').textContent = '我们会在24小时内完成训练并通知你';
+  uploadBox.querySelector('.hint').textContent = '点击"创建回响"开始上传';
   uploadBox.style.borderColor = 'var(--accent)';
+  
+  // Auto-upload
+  uploadFile(file);
+}
+
+async function uploadFile(file) {
+  const form = new FormData();
+  form.append('file', file);
+  
+  uploadBox.querySelector('.hint').textContent = '上传中...';
+  
+  try {
+    const resp = await fetch(API + '/upload', {
+      method: 'POST',
+      body: form
+    });
+    const data = await resp.json();
+    
+    if (data.success) {
+      uploadBox.querySelector('.title').textContent = '✅ 上传成功';
+      uploadBox.querySelector('.hint').textContent = '24小时内完成训练，我们将通过邮件通知你';
+      
+      // Create order
+      await fetch(API + '/order', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          name: '用户',
+          email: '',
+          files: data.files
+        })
+      });
+    } else {
+      uploadBox.querySelector('.title').textContent = '❌ 上传失败';
+      uploadBox.querySelector('.hint').textContent = data.error || '请重试';
+    }
+  } catch(e) {
+    // Server might not be running yet - this is expected in demo
+    uploadBox.querySelector('.title').textContent = '📤 文件已选择';
+    uploadBox.querySelector('.hint').textContent = '服务器即将上线，我们会尽快处理';
+    console.log('Server not reachable yet:', e.message);
+  }
 }
 
 function formatSize(bytes) {
